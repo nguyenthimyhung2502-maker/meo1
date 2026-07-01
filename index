@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Funny Cursor</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    cursor:none;
+}
+
+body{
+    background:black;
+    overflow:hidden;
+    height:100vh;
+    font-family:Arial;
+}
+
+#cursor{
+    position:fixed;
+    left:0;
+    top:0;
+    pointer-events:none;
+    font-size:40px;
+    transform:translate(-50%,-50%);
+    z-index:9999;
+}
+
+.trail{
+    position:fixed;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    pointer-events:none;
+    opacity:.5;
+    animation:fade .8s linear forwards;
+}
+
+@keyframes fade{
+    from{
+        transform:scale(1);
+        opacity:.7;
+    }
+    to{
+        transform:scale(3);
+        opacity:0;
+    }
+}
+
+.menu{
+    position:fixed;
+    top:20px;
+    left:20px;
+    z-index:99999;
+}
+
+button{
+    padding:8px 16px;
+    margin-right:10px;
+    background:#222;
+    color:white;
+    border:none;
+    border-radius:8px;
+}
+
+button:hover{
+    background:#555;
+}
+</style>
+</head>
+
+<body>
+
+<div class="menu">
+<button onclick="changeCursor('🐭')">Chuột</button>
+<button onclick="changeCursor('🪳')">Gián</button>
+<button onclick="changeCursor('🔴')">Laser</button>
+</div>
+
+<div id="cursor">🐭</div>
+
+<script>
+
+const cursor=document.getElementById("cursor");
+let mode="mouse";
+
+function changeCursor(icon){
+    cursor.innerHTML=icon;
+
+    if(icon=="🔴")
+        mode="laser";
+    else
+        mode="mouse";
+}
+
+document.addEventListener("mousemove",e=>{
+
+    cursor.style.left=e.clientX+"px";
+    cursor.style.top=e.clientY+"px";
+
+    let trail=document.createElement("div");
+    trail.className="trail";
+
+    trail.style.left=e.clientX+"px";
+    trail.style.top=e.clientY+"px";
+
+    if(mode=="laser"){
+        trail.style.background="red";
+        trail.style.boxShadow="0 0 20px red";
+    }
+    else{
+        trail.style.background="white";
+        trail.style.boxShadow="0 0 10px white";
+    }
+
+    document.body.appendChild(trail);
+
+    setTimeout(()=>{
+        trail.remove();
+    },800);
+
+});
+
+</script>
+
+</body>
+</html>
